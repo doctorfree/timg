@@ -1,3 +1,15 @@
 *.o
 *~
+build
 timg
+archive/*
+dist/*
+releases/*
+tmp
+# vim files
+.*.sw[a-z]
+*.un~
+Session.vim
+.netrwhist
+tmux*log
+.DS_Store
