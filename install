@@ -11,28 +11,22 @@ cd "${SCRIPT_PATH}"
 sudo rm -rf build
 mkdir build
 cd build
-# Defaults
-# -DWITH_LIBSIXEL=On
-# -DWITH_VIDEO_DECODING=On
-# -DWITH_VIDEO_DEVICE=On
-# -DWITH_GRAPHICSMAGICK=On
-# -DWITH_TURBOJPEG=On
-# -DWITH_POPPLER=On
-# -DWITH_RSVG=On
-# -DWITH_OPENSLIDE_SUPPORT=Off
-# -DWITH_QOI_IMAGE=On
-
 cmake ../ -DWITH_POPPLER=Off \
           -DWITH_VIDEO_DECODING=Off \
-          -DWITH_RSVG=Off \
+          -DWITH_VIDEO_DEVICE=Off \
           -DWITH_OPENSLIDE_SUPPORT=Off \
+          -DWITH_RSVG=Off \
           -DWITH_QOI_IMAGE=Off \
+          -DWITH_GRAPHICSMAGICK=Off \
           -DWITH_STB_IMAGE=On \
           -DWITH_LIBSIXEL=On \
-          -DWITH_VIDEO_DEVICE=Off \
-          -DWITH_GRAPHICSMAGICK=Off \
           -DWITH_TURBOJPEG=On
 make
-sudo rm -rf "${SCRIPT_PATH}"/dist
-mkdir "${SCRIPT_PATH}"/dist
-sudo make install DESTDIR="${SCRIPT_PATH}"/dist
+
+if [ "$1" == "dist" ]; then
+  sudo rm -rf "${SCRIPT_PATH}"/dist
+  mkdir "${SCRIPT_PATH}"/dist
+  sudo make install DESTDIR="${SCRIPT_PATH}"/dist
+else
+  sudo make install
+fi
