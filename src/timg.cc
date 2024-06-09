@@ -44,7 +44,7 @@
 #ifdef WITH_TIMG_VIDEO
 #    include "video-source.h"
 #endif
-#ifdef WITH_TIMG_GRPAPHICSMAGICK
+#ifdef WITH_TIMG_GRAPHICSMAGICK
 #    include <Magick++.h>
 
 #    include "graphics-magick-source.h"
@@ -434,7 +434,7 @@ static int PrintVersion(FILE *stream) {
                     " <https://timg.sh/>\n"
                     "Copyright (c) 2016..2024 Henner Zeller. "
                     "This program is free software; license GPL 2.0.\n\n");
-#ifdef WITH_TIMG_GRPAPHICSMAGICK
+#ifdef WITH_TIMG_GRAPHICSMAGICK
     fprintf(stream, "Image decoding %s\n",
             timg::GraphicsMagickSource::VersionInfo());
 #endif
@@ -470,7 +470,7 @@ static int PrintVersion(FILE *stream) {
 #    else
             "1"
 #    endif
-#    ifdef WITH_TIMG_GRPAPHICSMAGICK
+#    ifdef WITH_TIMG_GRAPHICSMAGICK
             // If we have graphics magic, that will take images first,
             // so STB will only really be called as fallback.
             " (fallback)"
@@ -491,7 +491,7 @@ static int PrintVersion(FILE *stream) {
 }
 
 int main(int argc, char *argv[]) {
-#ifdef WITH_TIMG_GRPAPHICSMAGICK
+#ifdef WITH_TIMG_GRAPHICSMAGICK
     Magick::InitializeMagick(*argv);
 #endif
 

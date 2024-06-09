@@ -1,4 +1,7 @@
 set(CMAKE_CXX_FLAGS "-W -Wall -Wextra -Wno-unused-parameter -O3 ${CMAKE_CXX_FLAGS}")
+set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 
 add_executable(timg timg.cc)
 target_sources(timg PRIVATE
@@ -48,13 +51,21 @@ configure_file(timg-version.h.in timg-version.h)
 if(WITH_LIBSIXEL)
   target_sources(timg PUBLIC sixel-canvas.h sixel-canvas.cc)
   target_compile_definitions(timg PUBLIC WITH_TIMG_SIXEL)
-  target_link_libraries(timg PkgConfig::LIBSIXEL)
+  if (LIBSIXEL_PKGCONFIG_FOUND)
+    target_link_libraries(timg PkgConfig::LIBSIXEL)
+  else()
+    # Use fallback.
+    target_include_directories(timg PUBLIC /usr/include/sixel)
+    target_link_libraries(timg ${LIBSIXEL_LIBRARY})
+  endif()
 endif()
 
 if(WITH_GRAPHICSMAGICK)
   target_sources(timg PUBLIC graphics-magick-source.h graphics-magick-source.cc)
-  target_compile_definitions(timg PUBLIC WITH_TIMG_GRPAPHICSMAGICK)
-  target_link_libraries(timg PkgConfig::GRAPHICSMAGICKXX)
+  target_include_directories(timg PUBLIC /usr/include/GraphicsMagick)
+  target_compile_definitions(timg PUBLIC WITH_TIMG_GRAPHICSMAGICK)
+  target_link_libraries(timg ${LIBGRAPHICSMAGICK_LIBRARY})
+  add_definitions(-DPREFIX_MAGICK_SYMBOLS)
 endif()
 
 if(WITH_RSVG)
@@ -72,11 +83,20 @@ endif()
 if(WITH_TURBOJPEG)
   target_sources(timg PUBLIC jpeg-source.h jpeg-source.cc)
   target_compile_definitions(timg PUBLIC WITH_TIMG_JPEG)
-  target_link_libraries(timg
-    PkgConfig::TURBOJPEG
-    PkgConfig::EXIF
-    PkgConfig::AVUTIL
-    PkgConfig::SWSCALE)
+  if (LIBTURBOJPEG_PKGCONFIG_FOUND)
+    target_link_libraries(timg
+      PkgConfig::TURBOJPEG
+      PkgConfig::EXIF
+      PkgConfig::AVUTIL
+      PkgConfig::SWSCALE)
+  else()
+    # Use fallback.
+    target_link_libraries(timg
+      ${LIBTURBOJPEG_LIBRARY}
+      ${LIBEXIF_LIBRARY}
+      ${LIBAVUTIL_LIBRARY}
+      ${LIBSWSCALE_LIBRARY})
+  endif()
 endif()
 
 if(WITH_OPENSLIDE_SUPPORT)
@@ -114,6 +134,9 @@ if(WITH_STB_IMAGE)
     target_compile_definitions(timg PUBLIC STB_RESIZE_VERSION2)
   endif()
   target_compile_definitions(timg PUBLIC WITH_TIMG_STB)
+  target_link_libraries(timg
+    ${LIBAVUTIL_LIBRARY}
+    ${LIBSWSCALE_LIBRARY})
 endif()
 
 if(WITH_QOI_IMAGE)
@@ -125,9 +148,12 @@ if(WITH_QOI_IMAGE)
     target_include_directories(timg PRIVATE ${CMAKE_SOURCE_DIR}/third_party/qoi)
   endif()
   target_compile_definitions(timg PUBLIC WITH_TIMG_QOI)
+# target_link_libraries(timg
+#   PkgConfig::AVUTIL
+#   PkgConfig::SWSCALE)
   target_link_libraries(timg
-    PkgConfig::AVUTIL
-    PkgConfig::SWSCALE)
+    ${LIBAVUTIL_LIBRARY}
+    ${LIBSWSCALE_LIBRARY})
 endif()
 
 # We always take the manpage from the checkout currently so that we don't

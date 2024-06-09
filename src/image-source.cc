@@ -192,7 +192,7 @@ ImageSource *ImageSource::Create(const std::string &filename,
         }
 #endif
 
-#ifdef WITH_TIMG_GRPAPHICSMAGICK
+#ifdef WITH_TIMG_GRAPHICSMAGICK
         result.reset(new GraphicsMagickSource(filename));
         if (result->LoadAndScale(options, frame_offset, frame_count)) {
             return result.release();
