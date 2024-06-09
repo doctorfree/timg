@@ -5,12 +5,15 @@ Terminal Image and Video Viewer
 ===============================
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://github.com/hzeller/timg/blob/main/LICENSE) &nbsp;
-[![Ubuntu Build](../../workflows/CI/badge.svg)](../../actions/workflows/ubuntu.yml)
-[![macOS Build](../../workflows/macOS%20Build/badge.svg)](../../actions/workflows/macos.yml)
-[![macOS Brew Building HEAD](../../workflows/macOS%20Brew%20Building%20HEAD/badge.svg)](../../actions/workflows/macos-brew.yml)
 
+**This fork** provides a minimally featured `timg` binary statically linked
+for use with [MusicPlayerPlus](https://github.com/doctorfree/MusicPlayerPlus).
+All that is required of this version of `timg` is the display of small images
+in `jpeg` or `png` format as the album covers used by `MusicPlayerPlus`. As
+such, many of the features of `timg` are not required. Additionally, a single
+statically linked `x86_64` binary can be used on all supported platforms.
 
-### https://timg.sh/
+### Forked from https://timg.sh/
 
 A user-friendly terminal image viewer that uses graphic capabilities of
 terminals (Sixel, Kitty or iterm2), or 24-Bit color capabilities and unicode
