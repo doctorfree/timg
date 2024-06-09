@@ -1,0 +1,32 @@
+#!/bin/bash
+
+SCRIPT_PATH="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+have_real=$(type -p realpath)
+[ "${have_real}" ] && SCRIPT_PATH="$(realpath $SCRIPT_PATH)"
+
+cd "${SCRIPT_PATH}"
+sudo rm -rf build
+mkdir build
+cd build
+cmake ../ -DWITH_POPPLER=Off \
+          -DWITH_VIDEO_DECODING=Off \
+          -DWITH_VIDEO_DEVICE=Off \
+          -DWITH_OPENSLIDE_SUPPORT=Off \
+          -DWITH_RSVG=Off \
+          -DWITH_QOI_IMAGE=Off \
+          -DWITH_GRAPHICSMAGICK=Off \
+          -DWITH_STB_IMAGE=On \
+          -DWITH_LIBSIXEL=On \
+          -DWITH_TURBOJPEG=On
+make
+
+if [ "$1" == "dist" ]; then
+  sudo rm -rf "${SCRIPT_PATH}"/dist
+  mkdir "${SCRIPT_PATH}"/dist
+  sudo make install DESTDIR="${SCRIPT_PATH}"/dist
+else
+  sudo make install
+fi
